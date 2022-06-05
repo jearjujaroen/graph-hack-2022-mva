@@ -25,17 +25,33 @@ import {
 
 import { integer } from '@protofire/subgraph-toolkit'
 
+import { Address, BigInt, log } from '@graphprotocol/graph-ts';
+
 export function handleTransfer(event: TransferEvent): void {
 	let contract = fetchERC721(event.address)
 	if (contract != null) {
 		let token = fetchERC721Token(contract, event.params.tokenId)
 		let from  = fetchAccount(event.params.from)
 		let to    = fetchAccount(event.params.to)
-		from.totalTransactions = integer.increment(from.totalTransactions);
-		from.save()
+		
+		let artContracts = ["0x96dc73c8b5969608c77375f085949744b5177660","0x89ac334a1c882217916cb90f2a45cba88ce35a52", "0x85a19dd2ad0d1d2b25bb164810fad08cdc0b33d7","0xd21818b6052df69eed04e9b2af564b75140aacb7"]
+    for (let artIdx = 0; artIdx < artContracts.length; ++artIdx) {
+      if (artContracts[artIdx] == contract.id.toString()) {
+        let currentFromTotalArt = from.totalArtTransactions;
+        if (!currentFromTotalArt) {
+          currentFromTotalArt = integer.ZERO;
+        }
+        from.totalArtTransactions = currentFromTotalArt.plus(BigInt.fromI32(1));
+        from.save();
 
-		to.totalTransactions = integer.increment(to.totalTransactions);
-		to.save()
+        let currentToTotalArt = to.totalArtTransactions;
+        if (!currentToTotalArt) {
+          currentToTotalArt = integer.ZERO;
+        }
+        to.totalArtTransactions = currentToTotalArt.plus(BigInt.fromI32(1));
+        to.save();
+      }
+    }
 
 		token.owner = to.id
 

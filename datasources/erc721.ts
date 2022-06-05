@@ -27,19 +27,28 @@ export function handleTransfer(event: TransferEvent): void {
     let from = fetchAccount(event.params.from);
     let to = fetchAccount(event.params.to);
 
-    let currentFromTotal = from.totalTransactions;
-    if (!currentFromTotal) {
-      currentFromTotal = integer.ZERO;
-    }
-    from.totalTransactions = currentFromTotal.plus(BigInt.fromI32(1));
-    from.save();
+    let artContracts = ["0x96dC73c8B5969608C77375F085949744b5177660","0x89AC334A1C882217916CB90f2A45cBA88cE35a52", "0x85A19dd2aD0d1d2b25Bb164810FaD08cdc0B33d7","0xd21818B6052dF69EEd04E9b2aF564b75140aAcb7"]
+    for (let artIdx = 0; artIdx < artContracts.length; ++artIdx) {
+      if (artContracts[artIdx] == contract.id.toString()) {
+        let currentFromTotalArt = from.totalArtTransactions;
+        if (!currentFromTotalArt) {
+          currentFromTotalArt = integer.ZERO;
+        }
+        from.totalArtTransactions = currentFromTotalArt.plus(BigInt.fromI32(1));
+        from.save();
 
-    let currentToTotal = to.totalTransactions;
-    if (!currentToTotal) {
-      currentToTotal = integer.ZERO;
+        let currentToTotalArt = to.totalArtTransactions;
+        if (!currentToTotalArt) {
+          currentToTotalArt = integer.ZERO;
+        }
+        to.totalArtTransactions = currentToTotalArt.plus(BigInt.fromI32(1));
+        to.save();
+      }
     }
-    to.totalTransactions = currentToTotal.plus(BigInt.fromI32(1));
-    to.save();
+    
+    
+    // let collectibleContracts = ["0x1eFf5ed809C994eE2f500F076cEF22Ef3fd9c25D","0xECDD2F733bD20E56865750eBcE33f17Da0bEE461","0xB78f1A96F6359Ef871f594Acb26900e02bFc8D00","0x6CC8e06D647883868f2d3149b0eA0734FD67f3e4", "0xABF66CA534f8A5081303E3873F0f4771c67B7b45","0xDBCab7A768EA9a00B2fFA5A2eB387cAD609E2114"]
+
 
     token.owner = to.id;
 

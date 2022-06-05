@@ -42,8 +42,8 @@ export class Account extends Entity {
     this.set("id", Value.fromBytes(value));
   }
 
-  get totalTransactions(): BigInt | null {
-    let value = this.get("totalTransactions");
+  get totalArtTransactions(): BigInt | null {
+    let value = this.get("totalArtTransactions");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -51,11 +51,11 @@ export class Account extends Entity {
     }
   }
 
-  set totalTransactions(value: BigInt | null) {
+  set totalArtTransactions(value: BigInt | null) {
     if (!value) {
-      this.unset("totalTransactions");
+      this.unset("totalArtTransactions");
     } else {
-      this.set("totalTransactions", Value.fromBigInt(<BigInt>value));
+      this.set("totalArtTransactions", Value.fromBigInt(<BigInt>value));
     }
   }
 

@@ -8,7 +8,7 @@ export function fetchAccount(address: Address): Account {
   let account = Account.load(address);
   if (account == null) {
     account = new Account(address);
-    account.totalTransactions = integer.ZERO;
+    account.totalArtTransactions = integer.ZERO;
     account.save();
   }
   return account;
