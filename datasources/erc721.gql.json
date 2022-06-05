@@ -4,6 +4,7 @@
     "fields": [
       { "name": "id", "type": "Bytes!" },
       { "name": "totalTransactions", "type": "BigInt" },
+      { "name": "totalArtTransactions", "type": "BigInt" },
       { "name": "asERC721", "type": "ERC721Contract" },
       { "name": "ERC721tokens", "type": "ERC721Token!", "derived": "owner" },
       {

@@ -53,7 +53,7 @@ export function fetchERC721(address: Address): ERC721Contract | null {
     contract.asAccount = address;
     contract.save();
 
-    let account = fetchAccount(address);
+    let account = fetchAccount(address, address.toString());
     account.asERC721 = address;
     account.save();
   }
@@ -72,7 +72,7 @@ export function fetchERC721Token(
     token = new ERC721Token(id);
     token.contract = contract.id;
     token.identifier = identifier;
-    token.approval = fetchAccount(constants.ADDRESS_ZERO).id;
+    token.approval = fetchAccount(constants.ADDRESS_ZERO, constants.ADDRESS_ZERO.toString()).id;
 
     if (contract.supportsMetadata) {
       let erc721 = IERC721.bind(Address.fromBytes(contract.id));

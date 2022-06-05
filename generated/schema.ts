@@ -59,6 +59,23 @@ export class Account extends Entity {
     }
   }
 
+  get totalArtTransactions(): BigInt | null {
+    let value = this.get("totalArtTransactions");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalArtTransactions(value: BigInt | null) {
+    if (!value) {
+      this.unset("totalArtTransactions");
+    } else {
+      this.set("totalArtTransactions", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
   get asERC721(): Bytes | null {
     let value = this.get("asERC721");
     if (!value || value.kind == ValueKind.NULL) {

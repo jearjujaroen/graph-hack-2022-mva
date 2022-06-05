@@ -25,14 +25,23 @@ import {
 
 import { integer } from '@protofire/subgraph-toolkit'
 
+import getCategory from '../fetch/categories'
+
 export function handleTransfer(event: TransferEvent): void {
 	let contract = fetchERC721(event.address)
 	if (contract != null) {
 		let token = fetchERC721Token(contract, event.params.tokenId)
-		let from  = fetchAccount(event.params.from)
-		let to    = fetchAccount(event.params.to)
+		let from  = fetchAccount(event.params.from, event.address.toString())
+		let to    = fetchAccount(event.params.to, event.address.toString())
+		let category = getCategory(event.address)
 		from.totalTransactions = integer.increment(from.totalTransactions);
+		if(category === "art"){
+			from.totalArtTransactions = integer.increment(from.totalArtTransactions)
+		}
+
 		from.save()
+
+		
 
 		to.totalTransactions = integer.increment(to.totalTransactions);
 		to.save()
@@ -58,8 +67,8 @@ export function handleApproval(event: ApprovalEvent): void {
 	let contract = fetchERC721(event.address)
 	if (contract != null) {
 		let token    = fetchERC721Token(contract, event.params.tokenId)
-		let owner    = fetchAccount(event.params.owner)
-		let approved = fetchAccount(event.params.approved)
+		let owner    = fetchAccount(event.params.owner, event.address.toString())
+		let approved = fetchAccount(event.params.approved, event.address.toString())
 
 		token.owner    = owner.id
 		token.approval = approved.id
@@ -82,8 +91,8 @@ export function handleApproval(event: ApprovalEvent): void {
 export function handleApprovalForAll(event: ApprovalForAllEvent): void {
 	let contract = fetchERC721(event.address)
 	if (contract != null) {
-		let owner      = fetchAccount(event.params.owner)
-		let operator   = fetchAccount(event.params.operator)
+		let owner      = fetchAccount(event.params.owner, event.address.toString())
+		let operator   = fetchAccount(event.params.operator, event.address.toString())
 		let delegation = fetchERC721Operator(contract, owner, operator)
 
 		// delegation.approved = event.params.approved
